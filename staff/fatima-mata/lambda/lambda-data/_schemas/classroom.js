@@ -8,7 +8,7 @@ const Task = require('./task')
         required: true,
         ref: 'User'
     },
-     className: {
+     name: {
          type:String,
          required:true
      },

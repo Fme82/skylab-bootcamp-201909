@@ -1,4 +1,4 @@
-const { Schema, ObjectId } = require('mongoose')
+const { Schema } = require('mongoose')
 const { validators: { isEmail } } = require('lambda-util')
 
 module.exports =  new Schema({

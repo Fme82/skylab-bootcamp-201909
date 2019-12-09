@@ -11,17 +11,16 @@ module.exports = function (id) {
 
         if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
-        await Classroom.updateMany({ user: id })
+        const classrooms = await Classroom.find({ user: ObjectId(id) }, { __v: 0 }).lean()
 
-        const classes = await Classroom.find({ user: id }, { __v: 0 }).lean()
+        classrooms.forEach(classroom => {
+            classroom.id = classroom._id.toString()
 
-        classes.forEach(_class => {
-            _class.id = _class._id.toString()
-            delete _class._id
+            delete classroom._id
 
-            _class.user = id
+            classroom.user = id
         })
 
-        return classes
+        return classrooms
     })()
 }
