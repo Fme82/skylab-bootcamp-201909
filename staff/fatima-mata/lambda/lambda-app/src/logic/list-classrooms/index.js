@@ -7,7 +7,7 @@ module.exports = function (token) {
     validate.string.notVoid('token', token)
 
     return (async () => {
-        const res = await call(`${API_URL}/classes`, {
+        const res = await call(`${API_URL}/classrooms`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

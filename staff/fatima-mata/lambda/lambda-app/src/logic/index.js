@@ -3,9 +3,9 @@ module.exports = {
     registerUser: require('./register-user'),
     retrieveUser: require('./retrieve-user'),
     listStudents: require ('./list-students'),
-    listClasses: require ('./list-classes'),
+    listClassrooms: require ('./list-classrooms'),
     deleteUser: require('./delete-user'),
-    createClass: require('./create-classrooms'),
+    createClassroom: require('./create-classroom'),
     //modifyUser: require('./modify-user'),
     
     //createTask: require('./create-task'),

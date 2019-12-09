@@ -6,31 +6,29 @@ import Register from '../Register'
 import Board from '../Board'
 import StudentList from '../StudentList';
 import CreateStudent from '../CreateStudent';
-import ClassList from '../ClassList';
-import CreateClass from '../CreateClass';
+import ClassroomList from '../ClassroomList';
+import CreateClassroom from '../CreateClassroom';
 import { Route, withRouter, Redirect } from 'react-router-dom'
-import { authenticateUser, registerUser, retrieveUser, listStudents, listClasses, createClass, createStudent, deleteClass, deleteUser } from '../../logic'
+import { authenticateUser, registerUser, retrieveUser, listStudents, listClassrooms, createClassroom, createStudent, deleteClassroom, deleteUser } from '../../logic'
 
 
 
 
 export default withRouter(function ({ history }) {
     const [students, setStudents] = useState([])
-    const [classes, setClasses] = useState([])
+    const [classrooms, setClassrooms] = useState([])
     const [control, setControl] = useState(false)
     const [user, setUser] = useState({})
 
     useEffect(() => {
 
-        const { token, type } = sessionStorage;
+        const { token } = sessionStorage;
 
         (async () => {
-            if (token && type) {
-                const student = await listStudents(token)
-                const _class = await listClasses(token)
+            if (token) {
+                const classrooms = await listClassrooms(token)
                 const user = await retrieveUser(token)
-                setStudents(student)
-                setClasses(_class)
+                setClassrooms(classrooms)
                 setUser(user)
             }
         })()
@@ -42,9 +40,8 @@ export default withRouter(function ({ history }) {
 
     async function handleLogin(username, password) {
         try {
-            debugger
             const token = await authenticateUser(username, password)
-            debugger
+
             sessionStorage.token = token
 
             history.push('/board')
@@ -53,9 +50,9 @@ export default withRouter(function ({ history }) {
         }
     }
 
-    async function handleRegister(name, surname, email, username, password, type) {
+    async function handleRegister(name, surname, email, username, password) {
         try {
-            await registerUser(name, surname, email, username, password, type)
+            await registerUser(name, surname, email, username, password)
 
             history.push('/login')
         } catch (error) {
@@ -69,43 +66,42 @@ export default withRouter(function ({ history }) {
         setStudents(students)
     }
 
-    async function handleRemoveStudents(id){
+    async function handleRemoveStudents(id) {
         const { token } = sessionStorage
         await deleteUser(token, id)
 
         setControl(!control)
     }
 
-    async function handleCreateStudent(name, surname, email, username, password){
-        const type = 'student'
-        await createStudent(name, surname, email, username, password, type)
+    async function handleCreateStudent(name, surname, email) {
+        await createStudent(name, surname, email)
 
         setControl(!control)
 
     }
 
-    async function handleRetrieveClass() {
-        const classes = await listClasses(token)
+    async function handleRetrieveClassroom() {
+        const classrooms = await listClassrooms(token)
 
-        setClasses(classes)
+        setClassrooms(classrooms)
     }
 
-    async function handleRemoveClasses(id){
+    async function handleRemoveClassroom(id) {
         const { token } = sessionStorage
-        await deleteClass(token, id)
+        await deleteClassroom(token, id)
 
         setControl(!control)
     }
 
-    async function handleCreateClass(className){
+    async function handleCreateClassroom(className) {
         const { token } = sessionStorage
         debugger
         try {
-            await createClass(token, className)
+            await createClassroom(token, className)
             debugger
-            const classes = await listClasses(token) 
+            const classes = await listClassrooms(token)
             debugger
-            setClasses(classes)
+            setClassrooms(classes)
 
             history.push('/board')
         } catch ({ message }) {
@@ -125,19 +121,19 @@ export default withRouter(function ({ history }) {
     }
 
 
-    const { token} = sessionStorage
+    const { token } = sessionStorage
 
     return <>
-    <Route exact path="/" render={() => token ? <Redirect to="/board" /> : <Landing onRegister={handleGoToRegister} onLogin={handleGoToLogin} />} />
-    <Route path="/register" render={() => token ? <Redirect to="/board" /> : <Register onRegister={handleRegister} onBack={handleGoBack} />} />
-    <Route path="/login" render={() => token ? <Redirect to="/board" /> : <Login onLogin={handleLogin} onBack={handleGoBack} />} />
-    <Route path="/board" render={() => token ? <Board onLogout={handleLogout} classes={classes} /> : <Redirect to="/" />} />
-    <Route path="/student-list" render={() => token ? <StudentList students = {students} onRemoveStudent={handleRemoveStudents} /> : <Redirect to="/" />} />
-    <Route path="/student-create" render={() => token ? <CreateStudent onCreateStudent={handleCreateStudent} onRetrieveStudent={handleRetrieveStudent} /> : <Redirect to="/" />} />
-    <Route path="/class-list" render={() => token ? <ClassList classes = {classes} onRemoveClass={handleRemoveClasses} /> : <Redirect to="/" />} />
-    <Route path="/class-create" render={() => token ? <CreateClass onCreateClass={handleCreateClass} onRetrieveClass={handleRetrieveClass} /> : <Redirect to="/" />} />
-    
-</>
+        <Route exact path="/" render={() => token ? <Redirect to="/board" /> : <Landing onRegister={handleGoToRegister} onLogin={handleGoToLogin} />} />
+        <Route path="/register" render={() => token ? <Redirect to="/board" /> : <Register onRegister={handleRegister} onBack={handleGoBack} />} />
+        <Route path="/login" render={() => token ? <Redirect to="/board" /> : <Login onLogin={handleLogin} onBack={handleGoBack} />} />
+        <Route path="/board" render={() => token ? <Board onLogout={handleLogout} classrooms={classrooms} /> : <Redirect to="/" />} />
+        <Route path="/list-students" render={() => token ? <StudentList students={students} onRemoveStudent={handleRemoveStudents} /> : <Redirect to="/" />} />
+        <Route path="/create-student" render={() => token ? <CreateStudent onCreateStudent={handleCreateStudent} onRetrieveStudent={handleRetrieveStudent} /> : <Redirect to="/" />} />
+        <Route path="/classroom-list" render={() => token ? <ClassroomList classrooms={classrooms} onRemoveClassroom={handleRemoveClassroom} /> : <Redirect to="/" />} />
+        <Route path="/create-classroom" render={() => token ? <CreateClassroom onCreateClassroom={handleCreateClassroom} onRetrieveClassroom={handleRetrieveClassroom} /> : <Redirect to="/" />} />
+
+    </>
 
 
 })
@@ -145,7 +141,7 @@ export default withRouter(function ({ history }) {
 
 
 
-    
+
 
 
 
