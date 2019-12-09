@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { createClass, retrieveClass, deleteClass, addStudent, deleteStudent, addTeacher, deleteTeacher, listTeachers } = require('../../logic')
+const { createClass, retrieveClass, deleteClass, createStudents, deleteStudent, addTeacher, deleteTeacher, listTeachers } = require('../../logic')
 const jwt = require('jsonwebtoken')
 const { env: { SECRET } } = process
 const tokenVerifier = require('../../helpers/token-verifier')(SECRET)
@@ -11,10 +11,10 @@ const jsonBodyParser = bodyParser.json()
 const router = Router()
 
 router.post('/', tokenVerifier, jsonBodyParser, (req, res) => {
-    const { id, body: { className } } = req
+    const { id, body: { name } } = req
 debugger
     try {
-        createClass(id, className)
+        createClass(id, name)
             .then(id => res.status(201).json( id ))
             .catch(error => {
                 const { message } = error
@@ -53,30 +53,12 @@ router.delete('/:classId', tokenVerifier, (req, res) => {
     }
 })
 
-router.get('/', tokenVerifier, (req, res) => {
-    try {
-        const { id } = req
 
-        listClasses(id)
-            .then(classes => res.json(classes))
-            .catch(error => {
-                const { message } = error
-
-                if (error instanceof NotFoundError)
-                    return res.status(404).json({ message })
-
-                res.status(500).json({ message })
-            })
-    } catch ({ message }) {
-        res.status(400).json({ message })
-    }
-})
-
-router.post('/student', jsonBodyParser, (req, res) => {
-    const { body: { name, surname, email, className } } = req
+router.post('/student/:idClassroom', tokenVerifier, jsonBodyParser, (req, res) => {
+    const { id, params: {idClassroom}, body: { name, surname, email } } = req
 
     try {
-        addStudent(name, surname, email, className)
+        createStudents(id, idClassroom, name, surname, email)
             .then(() => res.status(201).end())
             .catch(error => {
                 const { message } = error

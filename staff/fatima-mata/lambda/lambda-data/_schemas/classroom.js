@@ -13,7 +13,7 @@ const Task = require('./task')
          required:true
      },
      
-     student: [ Student ],
+     students: [ Student ],
      task: [Task]
  })
 

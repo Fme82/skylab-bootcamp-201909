@@ -1,10 +1,10 @@
 
 module.exports = {
-    createClass: require('./create-class'), 
+    createClass: require('./create-classroom'), 
     deleteClass: require('./remove-class'), 
     deleteStudent: require('./remove-student'),
-    listStudents: require('./list-students'),
-    listClasses: require('./list-class'),
+    createStudents: require('./create-students'),
+    listClassrooms: require('./list-classrooms'),
     registerUser: require('./register-user'),
     authenticateUser: require('./authenticate-user'),
     retrieveUser: require ('./retrieve-user'),

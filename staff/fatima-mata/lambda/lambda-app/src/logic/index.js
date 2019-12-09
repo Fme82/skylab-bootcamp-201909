@@ -5,7 +5,7 @@ module.exports = {
     listStudents: require ('./list-students'),
     listClasses: require ('./list-classes'),
     deleteUser: require('./delete-user'),
-    createClass: require('./create-class'),
+    createClass: require('./create-classrooms'),
     //modifyUser: require('./modify-user'),
     
     //createTask: require('./create-task'),
