@@ -27,13 +27,13 @@ describe('logic - authenticate user', () => {
     })
 
     it('should succeed on correct credentials', async () => {
-        const credentials = await authenticateUser(username, password)
+        const token = await authenticateUser(username, password)
 
-        expect(credentials.token).toBeDefined()
-        expect(typeof credentials.token).toBe('string')
-        expect(credentials.token.length).toBeGreaterThan(0)
+        expect(token).toBeDefined()
+        expect(typeof token).toBe('string')
+        expect(token.length).toBeGreaterThan(0)
 
-        const [, payload,] = credentials.token.split('.')
+        const [, payload, ] = token.split('.')
 
         const { sub } = JSON.parse(atob(payload))
 

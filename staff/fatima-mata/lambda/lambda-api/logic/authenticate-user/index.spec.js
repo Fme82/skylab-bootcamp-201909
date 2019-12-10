@@ -95,7 +95,5 @@ describe('logic - authenticate user', () => {
         expect(() => authenticateUser(email, ' \t\r')).to.throw(ContentError, 'password is empty or blank')
     })
 
-    // TODO other cases
-
     after(() => User.deleteMany().then(database.disconnect))
 })

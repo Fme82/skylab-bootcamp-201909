@@ -17,11 +17,11 @@ export default function ({ onRegister, error }) {
                 onRegister(name, surname, email, username, password)
             }}>
                 <h1 className="register__title">REGISTER</h1>
-                <input className="register__input" type="text" name="name" placeholder="name" />
-                <input className="register__input" type="text" name="surname" placeholder="surname" />
+                <input className="register__input" type="text" name="name" placeholder="Name" />
+                <input className="register__input" type="text" name="surname" placeholder="Surname" />
                 <input className="register__input" type="email" name="email" placeholder="e-mail" />
-                <input className="register__input" type="username" name="username" placeholder="username" />
-                <input className="register__input" type="password" name="password" placeholder="password" />
+                <input className="register__input" type="username" name="username" placeholder="Username" />
+                <input className="register__input" type="password" name="password" placeholder="Password" />
                 <button className="register__button">ENTER</button>
                 <Link to="/login" className="register__button">GO BACK</Link>
             </form>

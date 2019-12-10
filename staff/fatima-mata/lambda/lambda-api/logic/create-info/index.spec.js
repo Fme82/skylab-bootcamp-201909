@@ -1,14 +1,14 @@
 require('dotenv').config()
 const { env: { TEST_DB_URL } } = process
 const { expect } = require('chai')
-const createClassroom = require('.')
+const createStudents = require('.')
 const { random } = Math
 const { database, models: { User, Classroom } } = require('lambda-data')
 
-describe('logic - create classroom', () => {
+describe('logic - create info', () => {
     before(() => database.connect(TEST_DB_URL))
 
-    let id, name
+    let id, idClassroom, name, surname, email, password, title, description
 
     beforeEach(async () => {
         name = `name-${random()}`
@@ -16,28 +16,21 @@ describe('logic - create classroom', () => {
         email = `email-${random()}@mail.com`
         username = `username-${random()}`
         password = `password-${random()}`
+        nameClassroom = `Sname-${Math.random()}`
 
         await Promise.all([User.deleteMany(), Classroom.deleteMany()])
 
-        const user = await User.create({ name, surname, email, username, password })
-
+        const user = await User.create ({name: name, surname: surname, email: email, password: password, username: username})
         id = user.id
-
-        name = `name-${random()}`
+        const classroom = await Classroom.create({user : id, name: nameClassroom})
+        idClassroom = classroom.id
+        
     })
 
-    it('should succeed on correct user and class data', async () => {
-        const classroomId = await createClassroom(id, name)
+    it('should succeed on correct data', async () => {
 
-        expect(classroomId).to.exist
-        expect(classroomId).to.be.a('string')
-        expect(classroomId).to.have.length.greaterThan(0)
+        await createStudents( id, idClassroom, title, description)
 
-        const classroom = await Classroom.findById(classroomId)
-
-        expect(classroom).to.exist
-        expect(classroom.user.toString()).to.equal(id)
-        expect(classroom.name).to.equal(name)
     })
 
     after(() => Promise.all([User.deleteMany(), Classroom.deleteMany()]).then(database.disconnect))

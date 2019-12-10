@@ -25,7 +25,7 @@ module.exports = function (name, surname, email, username, password) {
 
         await User.create({ name, surname, email, username, password: hash })
 
-        
+
     })()
 
 }

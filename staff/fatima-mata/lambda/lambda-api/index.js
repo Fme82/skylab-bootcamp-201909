@@ -12,7 +12,6 @@ const api = express()
 api.use(cors())
 
 api.use('/users', users)
-api.use('/tasks', tasks)
 api.use('/classrooms', classrooms)
 
 

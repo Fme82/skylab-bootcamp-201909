@@ -1,11 +1,11 @@
 module.exports = {
     user: require('./user'),
     classroom: require('./classroom'),
-    task: require('./task'),
+    info: require('./info'),
     student: require('./student')
 }
-    
-   
-    
-    
-   
+
+
+
+
+

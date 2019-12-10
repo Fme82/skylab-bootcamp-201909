@@ -9,7 +9,7 @@ module.exports = function (username, password) {
     validate.string.notVoid('password', password)
 
     return (async () => {
-    
+
         const user = await User.findOne({ username })
 
         if (!user || !(await bcrypt.compare(password, user.password))) throw new CredentialsError('wrong credentials')

@@ -40,7 +40,7 @@ describe('logic - register user', () => {
 
     })
 
-describe('when user already exists', () => {
+    describe('when user already exists', () => {
         beforeEach(() => User.create({ name, surname, email, username, password: hash }))
 
         it('should fail on already existing user', async () => {
@@ -57,7 +57,7 @@ describe('when user already exists', () => {
                 expect(error.message).to.equal(`user with username ${username} already exists`)
             }
         })
-    
+
     })
 
     it('should fail on incorrect name, surname, email, password, or expression type and content', () => {

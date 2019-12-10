@@ -1,43 +1,46 @@
 const { env: { REACT_APP_TEST_DB_URL: TEST_DB_URL, REACT_APP_TEST_SECRET: TEST_SECRET } } = process
-const createClass = require('.')
+const createClassroom = require('.')
 const { random } = Math
-const { database, models: { User, Classroom } } = require('lambda-data')
+const { database, models: { User, Task } } = require('lambda-data')
 const jwt = require('jsonwebtoken')
 require('../../helpers/jest-matchers')
 
-describe('logic - create class', () => {
+describe('logic - create classroom', () => {
     beforeAll(() => database.connect(TEST_DB_URL))
 
-    let teacher, idA, name, token
+    let id, token, name, surname, email, username, password, className
 
     beforeEach(async () => {
-        name = `class-${random()}`
-        teacher = {
-            name: `name-${random()}`,
-            surname: `surname-${random()}`,
-            email: `email-${random()}@mail.com`,
-            username: `username-${random()}`,
-            password: `password-${random()}`,
-            type: 'teacher'
-        }
+        name = `name-${random()}`
+        surname = `surname-${random()}`
+        email = `email-${random()}@mail.com`
+        username = `username-${random()}`
+        password = `password-${random()}`
 
-        await Promise.all([User.deleteMany(), Classroom.deleteMany()])
+        await Promise.all([User.deleteMany(), Task.deleteMany()])
 
-        const teacher1 = await User.create(teacher)
-        idA = teacher1.id
-        token = jwt.sign({ sub: idA }, TEST_SECRET)
+        const user = await User.create({ name, surname, email, username, password })
 
+        id = user.id
+        token = jwt.sign({ sub: id }, TEST_SECRET)
+
+        className = `className-${random()}`
     })
 
-    it('should succeed on correct data', async () => {
-        
-        await createClass(token, name)
+    it('should succeed on correct user and task data', async () => {
+        const classroomId = await createClassroom(token, className)
 
-        const _class =  await Classroom.findOne({name})
-        
-        expect(_class).toBeDefined()
-        expect(_class.name).toBe(name)
+        expect(classroomId).toBeDefined()
+        expect(classroomId).toBeOfType('string')
+        expect(classroomId).toHaveLengthGreaterThan(0)
+
+        const classroom = await Task.findById(taskId)
+
+        expect(classroom).toBeDefined()
+        expect(classroom.user.toString()).toBe(id)
+        expect(classroom.name).toBe(name)
     })
 
-    afterAll(() => Promise.all([User.deleteMany(), Classroom.deleteMany()]).then(database.disconnect))
+
+    afterAll(() => Promise.all([User.deleteMany(), Task.deleteMany()]).then(database.disconnect))
 })

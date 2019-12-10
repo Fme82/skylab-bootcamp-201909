@@ -1,18 +1,17 @@
 const { Schema } = require('mongoose')
-const { validators: { isEmail } } = require('lambda-util')
 
 module.exports = new Schema({
-    name: {
+    title: {
         type: String,
         required: true
     },
-    surname: {
+    description: {
         type: String,
         required: true
     },
-    email: {
-        type: String,
+    date: {
+        type: Date,
         required: true,
-        validate: isEmail
-    },
+        default: Date.now
+    }
 })

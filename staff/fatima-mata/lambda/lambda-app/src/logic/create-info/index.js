@@ -2,21 +2,27 @@ const call = require('../../utils/call')
 const { validate, errors: { NotFoundError, CredentialsError, ContentError } } = require('lambda-util')
 const API_URL = process.env.REACT_APP_API_URL
 
-module.exports = function (token, name) {
+module.exports = function (token, idClassroom, title, description,) {
     validate.string(token)
     validate.string.notVoid('token', token)
 
-    validate.string(name)
-    validate.string.notVoid('name', name)
+    if (title) {
+        validate.string(title)
+        validate.string.notVoid('title', title)
+    }
+    if (description) {
+        validate.string(description)
+        validate.string.notVoid('description', description)
+    }
 
     return (async () => {
-        const res = await call(`${API_URL}/classrooms`, {
+        const res = await call(`${API_URL}/classrooms/info/${idClassroom}`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify( {name} )
+            body: JSON.stringify( {title, description} )
         })
 
         if (res.status === 201) return
@@ -29,5 +35,6 @@ module.exports = function (token, name) {
 
         throw new Error(JSON.parse(res.body).message)
     })()
-}
 
+    
+}

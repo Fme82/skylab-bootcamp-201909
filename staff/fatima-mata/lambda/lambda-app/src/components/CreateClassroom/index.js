@@ -1,28 +1,21 @@
-import React from 'react'
-import './index.sass'
-import Feedback from '../Feedback'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
 
-export default function ({ onCreateClassroom, error}) {
-    return <section className="view reg _hide">
-        <form onSubmit={function (event) {
+export default function ({ onSubmit }) {
+    const [name, setName] = useState('')
+
+    return <section className="view">
+    
+        <h2 className="classrooms__litle-title">Create Classroom</h2>
+        <form onSubmit={event => {
             event.preventDefault()
 
-            const { name: { value: name } } = event.target
+            onSubmit(name)
 
-            onCreateClassroom(name)
-        }}> 
-                
-            <div className="body-register">
-                <img className='body-register__image' src="../images/logo.jpg"/>
-                <form className="register__form">
-                <h1 className="register__title">CREATE CLASS</h1>
-                <input className="register__input" type="text" name="name" placeholder="name" />
-                <button className="register__button">ENTER</button>
-                <Link to="/board" className="register__button">GO BACK</Link>
-                </form> 
-            </div>
+            setName('')
+        }}>
+            <input className="classrooms__input" type="text" name="name" value={name} onChange={event => setName(event.target.value)} />
+            
+            <button className="classrooms__button">Add Classroom</button>
         </form>
-        {error && <Feedback message={error} />}
     </section>
 }

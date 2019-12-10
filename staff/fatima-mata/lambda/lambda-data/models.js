@@ -1,11 +1,11 @@
 const { model } = require('mongoose')
-const { user, classroom, task, student } = require('./_schemas')
+const { user, classroom, info, student } = require('./_schemas')
 
 module.exports = {
 
     User: model('User', user),
     Classroom: model('Classroom', classroom),
-    Task: model('Task', task),
+    Info: model('Info', info),
     Student: model('Student', student)
 
 }
